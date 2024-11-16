@@ -1,17 +1,7 @@
 #include "threeNPlusOne.h"
 
 unsigned int getNextThreeNPlusOne(unsigned int num) {
-  unsigned int out = 0;
-
-  bool even = num % 2 == 0;
-
-  if (even) {
-    out = num / 2;
-  } else {
-    out = (num * 3) + 1;
-  }
-
-  return out;
+  return num % 2 == 0 ? num / 2 : (3 * num) + 1;
 }
 
 unsigned int *genThreeNPlusOne(unsigned int num) {
@@ -23,7 +13,7 @@ unsigned int *genThreeNPlusOne(unsigned int num) {
   out[0] = num;
   out[1] = '\0';
 
-  if (num == 1) {
+  if (num <= 1) {
     return out;
   }
 

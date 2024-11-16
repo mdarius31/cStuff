@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdbool.h>
 #include <stdlib.h>
 
 #define uintSize sizeof(unsigned int)

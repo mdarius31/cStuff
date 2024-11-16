@@ -1,20 +1,24 @@
 #include "../lib/threeNPlusOne/threeNPlusOne.h"
 #include <stdio.h>
 
-void printThreeNPlusOne(unsigned int *t) {
-  printf("[START threeNPlusOne for %u]\n", t[0]);
+// used to ignore the unused parameter warnings
+#define UNUSED(x) (void)(x)
 
-  for (unsigned int i = 0; t[i] != '\0'; i++) {
+int main(int argc, char *argv[]) {
+  UNUSED(argc);
+
+		unsigned int input = 0;
+
+		if (argc <= 1)
+    scanf("%u", &input);
+  else
+    input = atoi(argv[1]);
+
+  unsigned int *t = genThreeNPlusOne(input);
+
+		for (unsigned int i = 0; t[i] != '\0'; i++) {
     printf("%u\n", t[i]);
   }
-  printf("[STOP threeNPlusOne for %u]\n", t[0]);
-}
-
-int main() {
-
-  unsigned int *t = genThreeNPlusOne(11);
-
-  printThreeNPlusOne(t);
 
   free(t);
 
