@@ -1,8 +1,7 @@
 #include "../lib/threeNPlusOne/threeNPlusOne.h"
+#include "../lib/common/common.h"
 #include <stdio.h>
 
-// used to ignore the unused parameter warnings
-#define UNUSED(x) (void)(x)
 
 int main(int argc, char *argv[]) {
   UNUSED(argc);
