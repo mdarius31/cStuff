@@ -1,4 +1,5 @@
 a.out
-a.o
-threeNPlusOne.o
-threeNPlusOne.x86_64
+*.o
+*.x86_64
+*.x86
+*.kate-swp
