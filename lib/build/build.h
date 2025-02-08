@@ -173,9 +173,11 @@ char* mdb_getBuildComdForTarget(mdb_Target *target) {
 int mdb_buildTarget(mdb_Target *t) {
 		UNUSED(t);
 		for(unsigned int i = 0; i < t->depsAmount; i++) {
+				free(t->deps[i]->deps);
 				free(t->deps[i]);
 				t->deps[i] = NULL;
 		}
+		free(t->deps);
 		free(t);
 		t = NULL;
 		return 0;
