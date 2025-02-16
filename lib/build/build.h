@@ -197,17 +197,16 @@ int mdb_buildTarget(mdb_Target *t) {
 		mdb_allDeps allDeps = { amount: 0, deps: NULL};
 		mdb_gatherAllDeps(&allDeps, t);
 
-
+		int resultOfComds = 0;
 
 		for(unsigned int i = 0; i < allDeps.amount; i++) {
 				char *comd = mdb_getBuildComdForTarget(allDeps.deps[i]);
 				printf("%s\n", comd);
-				system(comd);
+				resultOfComds = system(comd);
 				free(comd);
+
+				if(resultOfComds != 0) break;
 		}
-
-
-
 
 		free(allDeps.deps);
 		allDeps.deps = NULL;
@@ -223,7 +222,8 @@ int mdb_buildTarget(mdb_Target *t) {
 
 		free(t);
 		t = NULL;
-		return 0;
+
+		return resultOfComds;
 }
 
 
