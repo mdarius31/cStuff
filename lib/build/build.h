@@ -196,15 +196,20 @@ char* mdb_getBuildComdForTarget(mdb_Target *target) {
 int mdb_buildTarget(mdb_Target *t) {
 		mdb_allDeps allDeps = { amount: 0, deps: NULL};
 		mdb_gatherAllDeps(&allDeps, t);
-
 		int resultOfComds = 0;
 
 		for(unsigned int i = 0; i < allDeps.amount; i++) {
+				// in case its already compiled
+				if(allDeps.deps[i]->src == NULL) {
+						continue;
+				}
+
 				char *comd = mdb_getBuildComdForTarget(allDeps.deps[i]);
 				printf("%s\n", comd);
 				resultOfComds = system(comd);
 				free(comd);
 
+				// a command failed
 				if(resultOfComds != 0) break;
 		}
 
