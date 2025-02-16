@@ -37,9 +37,14 @@ struct mdb_Target {
 typedef struct mdb_allDeps mdb_allDeps;
 struct mdb_allDeps {
 		mdb_Deps deps;
-		unsigned int depsAmount;
+		unsigned int amount;
 };
 
+char* mdb_stpcpy(char *to, const char* src);
+char* mdb_addSpace(char *to);
+
+unsigned int mdb_calcLenOfTargetCommand(mdb_Target *target);
+char* mdb_getBuildComdForTarget(mdb_Target *target);
 
 mdb_Target *mdb_newTarget(char* name,char* src, char* compiler, char *namingFlag, mdb_Flags flags);
 mdb_Target *mdb_addDep(mdb_Target* final, mdb_Target *dep);
@@ -48,9 +53,9 @@ mdb_Target *mdb_addNewDep(mdb_Target* target, char* name, char* src, char* compi
 
 int mdb_buildTarget(mdb_Target *t);
 
-char* mdb_getBuildComdForTarget(mdb_Target *target);
-
 void mdb_printTarget(mdb_Target *target);
+
+void mdb_gatherAllDeps(mdb_allDeps *allDeps, mdb_Target *target);
 #ifdef __cplusplus
 }
 #endif
@@ -135,17 +140,33 @@ unsigned int mdb_calcLenOfTargetCommand(mdb_Target *target) {
 
 
 
-		return result += 1;// account for null termination
+		return result + 1;// account for null termination
+}
+
+
+
+
+void mdb_gatherAllDeps(mdb_allDeps *allDeps, mdb_Target *target){
+		allDeps->amount += 1;
+		allDeps->deps = realloc(allDeps->deps, sizeof(allDeps->deps) * allDeps->amount);
+
+		assert(allDeps->deps != NULL);
+
+		allDeps->deps[allDeps->amount - 1] = target;
+
+		for(unsigned int i = 0; i < target->depsAmount; i++) {
+				mdb_gatherAllDeps(allDeps, target->deps[i]);
+		}
 }
 
 
 char* mdb_getBuildComdForTarget(mdb_Target *target) {
 		unsigned int resultLen = mdb_calcLenOfTargetCommand(target);
 		char* result = malloc(resultLen * sizeof(char));
-		char* to = result;
 
 		assert(result != NULL);
 
+		char* to = result;
 
 		to = mdb_stpcpy(result, target->compiler);
 		to = mdb_addSpace(to);
@@ -170,14 +191,37 @@ char* mdb_getBuildComdForTarget(mdb_Target *target) {
 		return result;
 }
 
+
+
 int mdb_buildTarget(mdb_Target *t) {
-		UNUSED(t);
+		mdb_allDeps allDeps = { amount: 0, deps: NULL};
+		mdb_gatherAllDeps(&allDeps, t);
+
+		char *comd = NULL;
+
+		for(unsigned int i = 0; i < allDeps.amount; i++) {
+				comd = mdb_getBuildComdForTarget(allDeps.deps[i]);
+				printf("%s\n", comd);
+				system(comd);
+		}
+
+
+		free(comd);
+		comd = NULL;
+
+
+		free(allDeps.deps);
+		allDeps.deps = NULL;
+
 		for(unsigned int i = 0; i < t->depsAmount; i++) {
 				free(t->deps[i]->deps);
 				free(t->deps[i]);
 				t->deps[i] = NULL;
 		}
+
 		free(t->deps);
+		t->deps = NULL;
+
 		free(t);
 		t = NULL;
 		return 0;
