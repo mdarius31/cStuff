@@ -1,11 +1,7 @@
 #include "../lib/threeNPlusOne/threeNPlusOne.h"
-#include "../lib/common/common.h"
 #include <stdio.h>
 
-
 int main(int argc, char *argv[]) {
-  UNUSED(argc);
-
 		unsigned int input = 0;
 
 		if (argc <= 1)
