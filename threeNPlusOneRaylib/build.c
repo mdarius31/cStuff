@@ -2,15 +2,14 @@
 #include "../lib/build/build.h"
 
 int main(void) {
-		char *compiler = "cc";
-		char *namingFlag = "-o";
+	char *compiler = "cc";
+	char *namingFlag = "-o";
+	mdb_Flag flags[] = {
+		"-lm",
+		NULL
+	};
 
-		mdb_Flag flags[] = {
-			"-lm",
-			NULL
-		};
-
-	mdb_Target *final = mdb_newTarget("raylibTest.x86_64", "raylibTest.c", compiler, namingFlag, flags);
+	mdb_Target *final = mdb_newTarget("threeNPlusOneRaylib.x86_64", "threeNPlusOneRaylib.c", compiler, namingFlag, flags);
 	mdb_addCompdDep(final, "../lib/raylib/src/raudio.o");
 	mdb_addCompdDep(final, "../lib/raylib/src/rglfw.o");
 	mdb_addCompdDep(final, "../lib/raylib/src/rshapes.o");
@@ -19,6 +18,7 @@ int main(void) {
 	mdb_addCompdDep(final, "../lib/raylib/src/rmodels.o");
 	mdb_addCompdDep(final, "../lib/raylib/src/rtext.o");
 	mdb_addCompdDep(final, "../lib/raylib/src/utils.o");
+
 	mdb_buildTarget(final);
 
 	return 0;
