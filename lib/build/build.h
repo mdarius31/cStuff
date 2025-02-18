@@ -205,11 +205,9 @@ int mdb_buildTarget(mdb_Target *t) {
 		mdb_gatherAllDeps(&allDeps, t);
 		int resultOfComds = 0;
 
-		for(unsigned int i = 0; i < allDeps.amount; i++) {
-				// in case its already compiled
-				if(allDeps.deps[i]->src == NULL) {
-						continue;
-				}
+		for(int i = allDeps.amount - 1; i >= 0; i--) {
+				// in case its precompiled
+				if(allDeps.deps[i]->src == NULL) continue;
 
 				char *comd = mdb_getBuildComdForTarget(allDeps.deps[i]);
 				printf("%s\n", comd);
