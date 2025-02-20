@@ -58,7 +58,7 @@ void mdb_printTarget(mdb_Target *target);
 void mdb_gatherAllDeps(mdb_allDeps *allDeps, mdb_Target *target);
 
 
-mdb_Target *mdb_addCompdDep(mdb_Target* target, char* name);
+mdb_Target *mdb_addCompiledDep(mdb_Target* target, char* name);
 #ifdef __cplusplus
 }
 #endif
@@ -119,7 +119,7 @@ mdb_Target *mdb_addNewDep(mdb_Target* target, char* name, char* src, char* compi
 		return dep;
 }
 
-mdb_Target *mdb_addCompdDep(mdb_Target* target, char* name){
+mdb_Target *mdb_addCompiledDep(mdb_Target* target, char* name){
 	return mdb_addNewDep(target, name, NULL, NULL, NULL, NULL);
 }
 

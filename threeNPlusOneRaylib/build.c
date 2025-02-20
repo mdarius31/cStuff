@@ -7,14 +7,14 @@ int main(void) {
 
 	mdb_Target *final = mdb_newTarget("threeNPlusOneRaylib.x86_64", "threeNPlusOneRaylib.c", compiler, namingFlag,  (mdb_Flag[]) {"-lm",NULL});
 	mdb_addNewDep(final, "threeNPlusOne.o", "../lib/threeNPlusOne/threeNPlusOne.c", compiler, namingFlag, (mdb_Flag[]) {"-c",NULL});
-	mdb_addCompdDep(final, "../lib/raylib/src/raudio.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/rglfw.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/rshapes.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/rtextures.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/rcore.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/rmodels.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/rtext.o");
-	mdb_addCompdDep(final, "../lib/raylib/src/utils.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/raudio.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/rglfw.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/rshapes.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/rtextures.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/rcore.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/rmodels.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/rtext.o");
+	mdb_addCompiledDep(final, "../lib/raylib/src/utils.o");
 	mdb_buildTarget(final);
 
 	return 0;
