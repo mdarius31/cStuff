@@ -4,22 +4,22 @@
 #include <printf.h>
 
 int main(void) {
-		char *compiler = "cc";
-		char *namingFlag = "-o";
+  char *compiler = "cc";
+  char *namingFlag = "-o";
 
-		mdb_Flag flags[] = {"-static", "-m32",  "-Wextra",   "-Wall", "-Werror",
+  mdb_Flag flags[] = {"-static", "-m32",  "-Wextra",   "-Wall", "-Werror",
                    "-ansi", "--std=c99", NULL};
-		mdb_Flag depFlags[] = {"-c", "-static", "-m32",  "-Wextra",   "-Wall", "-Werror",
+  mdb_Flag depFlags[] = {"-c", "-static", "-m32",  "-Wextra",   "-Wall", "-Werror",
                    "-ansi", "--std=c99", NULL};
 
-		mdb_Target *final = mdb_newTarget("threeNPlusOne.x86_64", "threeNPlusOne.c", compiler, namingFlag, flags);
-		mdb_addNewDep(final, "threeNPlusOne.o", "../lib/threeNPlusOne/threeNPlusOne.c", compiler, namingFlag, depFlags);
+  mdb_Target *final = mdb_newTarget("threeNPlusOne.x86_64", "threeNPlusOne.c", compiler, namingFlag, flags);
+  mdb_addNewDep(final, "threeNPlusOne.o", "../lib/threeNPlusOne/threeNPlusOne.c", compiler, namingFlag, depFlags);
 
-		assert(mdb_buildTarget(final) == 0);
+  assert(mdb_buildTarget(final) == 0);
 
-		char *testCmd = "./threeNPlusOne.x86_64 10";
+  char *testCmd = "./threeNPlusOne.x86_64 10";
 
-		printf("test command: %s\n", testCmd);
+  printf("test command: %s\n", testCmd);
 
   return system(testCmd);
 }
