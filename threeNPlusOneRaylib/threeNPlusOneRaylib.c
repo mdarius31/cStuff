@@ -1,8 +1,17 @@
 #include "../lib/raylib/src/raylib.h"
+#include "../lib/threeNPlusOne/threeNPlusOne.h"
+#include <stdbool.h>
+
 
 int main(void) {
-	InitWindow(800, 600, "test");
+ InitWindow(800, 600, "darius test");
+ SetExitKey(KEY_NULL);
 
-	CloseWindow();
-	return 0;
+ while(!WindowShouldClose()) {
+  BeginDrawing();
+  ClearBackground(RAYWHITE);
+  EndDrawing();
+ }
+ CloseWindow();
+ return 0;
 }
