@@ -34,10 +34,10 @@ int main(void) {
  mdb_addCompiledDep(final, "../lib/raylib/src/rmodels.o");
  mdb_addCompiledDep(final, "../lib/raylib/src/rtext.o");
  mdb_addCompiledDep(final, "../lib/raylib/src/utils.o");
- mdb_buildTarget(final);
+ int result = mdb_buildTarget(final);
 
 
  free(flags);
  free(depFlags);
- return 0;
+ return result;
 }
