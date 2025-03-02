@@ -34,3 +34,41 @@ unsigned int *genThreeNPlusOne(unsigned int num) {
 
   return out;
 }
+
+
+ThreeNPlusOneArr *genThreeNPlusOneStruct(unsigned int num) {
+
+  ThreeNPlusOneArr *result = malloc(sizeof(ThreeNPlusOneArr));
+
+  unsigned int size = uintSize;
+
+
+  result->arr = malloc(size);
+  result->arr[0] = num;
+  result->len = 1;
+
+
+  if (num <= 1) {
+    return result;
+  }
+
+  unsigned int i = getNextThreeNPlusOne(num);
+
+  for (; i != 1; i = getNextThreeNPlusOne(i)) {
+    size += uintSize;
+
+    result->arr = realloc(result->arr,size);
+
+    result->arr[result->len] = i;
+
+    result->len += 1;
+
+  }
+
+  size += uintSize;
+  result->arr = realloc(result->arr, size);
+  result->arr[result->len] = 1;
+  result->len += 1;
+
+  return result;
+}
