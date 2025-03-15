@@ -5,7 +5,7 @@ int main(void) {
  char *compiler = "cc";
  char *namingFlag = "-o";
  const mdb_Flag baseFlags[] = {
- "-g","-m32", "-Wextra", "-Wall", "-Werror", "-ansi", "--std=c99", NULL
+ "-g","-m32", "-Wextra", "-Wall", "-Werror", "-ansi", "--std=c99", "-Wpedantic", "-Wuninitialized", "-Wshadow", "-D_FORTIFY_SOURCE=2", "-fstack-protector-all", NULL
  };
 
  const unsigned int baseFlagsSize = sizeof(baseFlags);
