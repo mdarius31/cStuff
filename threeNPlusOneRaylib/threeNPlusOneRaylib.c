@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include "../lib/common/common.h"
 
 #define MAXINTSTRLEN (unsigned int)snprintf(NULL, 0, "%u", UINT_MAX)
-#define UNUSED(x) (void)(x)
 
 static char* emptyStr() {
   char* str = malloc(sizeof(char));
@@ -71,6 +71,42 @@ static void rmLastChrFromStr(char* str) {
 
 }
 
+float getValByPerc(float perc, float whole) {
+ return (perc / 100) * whole;
+}
+
+float getPercByVal(float val, float whole){
+ return (val * 100) / whole;
+}
+
+
+float getValByPercBetweenMinNMax(float perc, float min, float max) {
+ return min + getValByPerc(perc, max - min);
+}
+
+// PRIMITIVE GLOBAL CONSTANTS
+const int fontSize = 40;
+const int graphFontSize = 30;
+const int margin = 10;
+const int instructsFontSize = 20;
+const char* instructsForNumsToggle = "Press N to toggle graph nums";
+
+// PRIMITVE GLOBALS
+int windowWidth = 0;
+int graphHeight = 0;
+int graphWidth = 0;
+unsigned int threeNPlusOneMax = 0;
+bool showGraphNums = true;
+
+
+void calculateGlobals() {
+ windowWidth = GetRenderWidth();
+ graphHeight = GetRenderHeight() - margin;
+ graphWidth = windowWidth  - margin;
+
+}
+
+
 int main(void) {
  SetTraceLogLevel(LOG_NONE);
 
@@ -82,16 +118,22 @@ int main(void) {
  bool shouldClose = false;
 
  char* input = emptyStr();
+
  ThreeNPlusOneArr* threeNPlusOneArr = NULL;
  char** threeNPlusOneStrArr = NULL;
 
- const int fontSize = 40;
- const int spaceBetweenNums = 15;
- const int startX = 10;
- const int startY = 10;
+ // CONSTANTS
+ const int instructsForNumsToggleTextSize = MeasureText(instructsForNumsToggle, instructsFontSize);
+ const int graphXPos = margin;
+ const int graphYPos = fontSize + margin;
+ const float graphLineWidth = 2.0;
+
+ calculateGlobals();
 
  while(!(WindowShouldClose() || shouldClose)) {
   int keyPressed = GetKeyPressed();
+
+
   const unsigned int inputLength = strlen(input);
 
   if(inputLength < MAXINTSTRLEN &&
@@ -105,6 +147,10 @@ int main(void) {
   if(keyPressed == KEY_ENTER) {
      if(inputLength > 0){
        threeNPlusOneArr = genThreeNPlusOneStruct(atoi(input));
+       threeNPlusOneMax = 0;
+       for(unsigned int i = 0; i < threeNPlusOneArr->len; i++) {
+        if(threeNPlusOneArr->arr[i] > threeNPlusOneMax) threeNPlusOneMax = threeNPlusOneArr->arr[i];
+       }
        threeNPlusOneStrArr = intArrToStrArr((int *)(threeNPlusOneArr->arr), threeNPlusOneArr->len);
 
        input = emptyStr();
@@ -113,45 +159,51 @@ int main(void) {
   }
 
   if(keyPressed == KEY_Q || keyPressed == KEY_ESCAPE) shouldClose = true;
+  if(keyPressed == KEY_N) showGraphNums = !showGraphNums;
 
-  if(IsWindowResized()) {
-
-  }
+  if(IsWindowResized()) calculateGlobals();
 
   BeginDrawing();
-  ClearBackground(RAYWHITE);
+  ClearBackground(GRAY);
 
-  DrawText(input, startX, startY, 40, BLACK);
-
-  if(threeNPlusOneStrArr != NULL){
-    int x = startX;
-    int y = startY + fontSize;
-
-    for(unsigned int i = 0; i < threeNPlusOneArr->len; i++){
+  DrawText(input, margin, margin, fontSize, LIGHTGRAY);
 
 
-     DrawText(threeNPlusOneStrArr[i], x, y, fontSize, BLACK);
+  DrawLineEx((Vector2){graphXPos,graphYPos}, (Vector2){graphXPos, graphHeight}, graphLineWidth, LIGHTGRAY);
+  DrawLineEx((Vector2){graphXPos, graphHeight}, (Vector2){graphWidth, graphHeight}, graphLineWidth, LIGHTGRAY);
 
-     const int textWidth = MeasureText(threeNPlusOneStrArr[i], fontSize);
-     const int potX = x + textWidth;
-     const int potXWidth = potX + textWidth;
+  if(threeNPlusOneArr != NULL) {
+   DrawText(threeNPlusOneStrArr[0], margin * 2,  fontSize + margin, fontSize, BLUE);
+   DrawText(instructsForNumsToggle, windowWidth - instructsForNumsToggleTextSize - margin, margin, instructsFontSize, BLACK);
+   float x = margin;
+   float y = graphHeight;
 
-     if(potXWidth >= GetRenderWidth()) {
-       x = startX;
-       y += fontSize;
-     } else {
-       x = potX;
-       if(i < threeNPlusOneArr->len - 1) x += spaceBetweenNums;
+   for(unsigned int i = 0; i < threeNPlusOneArr->len; i++) {
 
-     }
-    }
+
+      float x2 = getValByPercBetweenMinNMax(getPercByVal(i + 1, threeNPlusOneArr->len), graphXPos, graphWidth);
+
+
+      float percOfCurrentValueOfThreeNPlusOne = 100 - getPercByVal(threeNPlusOneArr->arr[i], threeNPlusOneMax);
+      float y2 = getValByPercBetweenMinNMax(percOfCurrentValueOfThreeNPlusOne, graphYPos, graphHeight);
+
+      DrawLineEx((Vector2){x,y}, (Vector2){x2,y2}, graphLineWidth, RED);
+
+      x = x2;
+      y = y2;
+      const int textWidth = MeasureText(threeNPlusOneStrArr[i], graphFontSize);
+
+      if(showGraphNums) DrawText(threeNPlusOneStrArr[i], x2 - textWidth / 2, y2 - graphFontSize / 2, graphFontSize, LIGHTGRAY);
+
+
+   }
   }
-
 
 
   EndDrawing();
  }
  CloseWindow();
+
 
  free(input);
  free(threeNPlusOneArr);
