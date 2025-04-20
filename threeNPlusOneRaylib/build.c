@@ -5,7 +5,9 @@ int main(void) {
  char *compiler = "cc";
  char *namingFlag = "-o";
  const mdb_Flag baseFlags[] = {
- "-g","-m32", "-Wextra", "-Wall", "-Werror", "-ansi", "--std=c99", "-Wpedantic", "-Wuninitialized", "-Wshadow", "-D_FORTIFY_SOURCE=2", "-fstack-protector-all", NULL
+ "-g","-m32", "-Wextra", "-Wall", "-Werror", "-ansi",
+ "--std=c99", "-Wpedantic", "-Wuninitialized", "-Wshadow",
+ "-D_FORTIFY_SOURCE=2", "-fstack-protector-all", NULL
  };
 
  const unsigned int baseFlagsSize = sizeof(baseFlags);
@@ -24,8 +26,13 @@ int main(void) {
 
  depFlags[(baseFlagsSize / mdb_FlagSize) - 1] =  "-c";
 
- mdb_Target *final = mdb_newTarget("threeNPlusOneRaylib.x86_64", "threeNPlusOneRaylib.c", compiler, namingFlag, flags);
- mdb_addNewDep(final, "threeNPlusOne.o", "../lib/threeNPlusOne/threeNPlusOne.c", compiler, namingFlag, depFlags);
+ mdb_Target *final = mdb_newTarget(
+ "threeNPlusOneRaylib.x86_64", "threeNPlusOneRaylib.c",
+ compiler, namingFlag, flags);
+ 
+ mdb_addNewDep(final, "threeNPlusOne.o",
+ "../lib/threeNPlusOne/threeNPlusOne.c", compiler, namingFlag, depFlags);
+
  mdb_addCompiledDep(final, "../lib/raylib/src/raudio.o");
  mdb_addCompiledDep(final, "../lib/raylib/src/rglfw.o");
  mdb_addCompiledDep(final, "../lib/raylib/src/rshapes.o");
