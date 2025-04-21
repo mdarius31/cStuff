@@ -7,7 +7,6 @@ int main(void) {
 
   mdb_Flag flags[] = {
    "-lm",
-   "-m32",
    NULL
   };
 

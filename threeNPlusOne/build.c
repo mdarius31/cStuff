@@ -7,9 +7,9 @@ int main(void) {
   char *compiler = "cc";
   char *namingFlag = "-o";
 
-  mdb_Flag flags[] = {"-static", "-m32",  "-Wextra",   "-Wall", "-Werror",
+  mdb_Flag flags[] = {"-static", "-Wextra",   "-Wall", "-Werror",
                    "-ansi", "--std=c99", NULL};
-  mdb_Flag depFlags[] = {"-c", "-static", "-m32",  "-Wextra",   "-Wall", "-Werror",
+  mdb_Flag depFlags[] = {"-c", "-static",  "-Wextra",   "-Wall", "-Werror",
                    "-ansi", "--std=c99", NULL};
 
   mdb_Target *final = mdb_newTarget("threeNPlusOne.x86_64", "threeNPlusOne.c", compiler, namingFlag, flags);

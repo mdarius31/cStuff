@@ -6,7 +6,7 @@ int main(void) {
 	char *namingFlag = "-o";
 
 	mdb_Flag flags[] = {
-		"-c", "-m32", "-Wall", "-D_GNU_SOURCE", "-DPLATFORM_DESKTOP_GLFW",
+		"-c", "-Wall", "-D_GNU_SOURCE", "-DPLATFORM_DESKTOP_GLFW",
 		"-DGRAPHICS_API_OPENGL_33", "-Wno-missing-braces",
 		"-Werror=pointer-arith", "-fno-strict-aliasing", "-std=c99",
 		"-fPIC", "-O1", "-Werror=implicit-function-declaration",
