@@ -3,3 +3,4 @@ a.out
 *.x86_64
 *.x86
 *.kate-swp
+vgcore.*
